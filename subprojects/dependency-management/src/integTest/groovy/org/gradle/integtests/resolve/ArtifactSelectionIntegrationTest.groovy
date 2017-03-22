@@ -159,7 +159,7 @@ allprojects {
         expect:
         succeeds "resolve"
         // Currently builds all file dependencies
-        result.assertTasksExecuted(":lib:jar", ":lib:utilClasses", ":lib:utilDir", ":lib:utilJar", ":ui:jar", ":app:resolve")
+        executed ":lib:jar", ":lib:utilClasses", ":lib:utilDir", ":lib:utilJar", ":ui:jar", ":app:resolve"
     }
 
     def "can create a view that selects different artifacts from the same dependency graph"() {
@@ -233,7 +233,7 @@ allprojects {
         expect:
         succeeds "resolve"
         // Currently builds all file dependencies
-        result.assertTasksExecuted(":lib:classes", ":lib:utilClasses", ":lib:utilDir", ":lib:utilJar", ":ui:classes", ":app:resolve")
+        executed ":lib:classes", ":lib:utilClasses", ":lib:utilDir", ":lib:utilJar", ":ui:classes", ":app:resolve"
     }
 
     def "applies compatibility and disambiguation rules when selecting variant"() {
@@ -527,7 +527,7 @@ task show {
         expect:
         succeeds "resolve"
         // Currently builds all file dependencies
-        result.assertTasksExecuted(":lib:classes", ":lib:utilClasses", ":lib:utilDir", ":lib:utilJar", ":ui:classes", ":app:resolve")
+        executed ":lib:classes", ":lib:utilClasses", ":lib:utilDir", ":lib:utilJar", ":ui:classes", ":app:resolve"
     }
 
     def "can create a view for configuration that has no attributes"() {
