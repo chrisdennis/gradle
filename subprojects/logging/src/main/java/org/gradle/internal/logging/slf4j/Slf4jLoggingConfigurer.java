@@ -19,6 +19,7 @@ package org.gradle.internal.logging.slf4j;
 import org.gradle.api.logging.LogLevel;
 import org.gradle.internal.logging.config.LoggingConfigurer;
 import org.gradle.internal.logging.events.OutputEventListener;
+import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -39,13 +40,18 @@ public class Slf4jLoggingConfigurer implements LoggingConfigurer {
             return;
         }
 
-        OutputEventListenerBackedLoggerContext context = (OutputEventListenerBackedLoggerContext) LoggerFactory.getILoggerFactory();
+        ILoggerFactory factory = LoggerFactory.getILoggerFactory();
+        if (factory instanceof OutputEventListenerBackedLoggerContext) {
+            OutputEventListenerBackedLoggerContext context = (OutputEventListenerBackedLoggerContext) factory;
 
-        if (currentLevel == null) {
-            context.setOutputEventListener(outputEventListener);
+            if (currentLevel == null) {
+                context.setOutputEventListener(outputEventListener);
+            }
+
+            currentLevel = logLevel;
+            context.setLevel(logLevel);
+        } else {
+            System.err.println("Logging cannot be configured via factory : " + factory.getClass());
         }
-
-        currentLevel = logLevel;
-        context.setLevel(logLevel);
     }
 }
